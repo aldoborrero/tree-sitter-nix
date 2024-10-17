@@ -3,10 +3,13 @@
   "version": "0.0.2",
   "description": "Tree Sitter grammar for Nix",
   "main": "bindings/node",
+  "types": "bindings/node",
   "scripts": {
-    "build": "npm run generate && node-gyp build",
-    "generate": "tree-sitter generate --abi 13",
-    "test": "tree-sitter test"
+    "install": "node-gyp-build",
+    "prestart": "tree-sitter build --wasm",
+    "start": "tree-sitter playground",
+    "test": "node --test bindings/node/*_test.js",
+    "prebuildify": "prebuildify --napi --strip"
   },
   "repository": {
     "type": "git",
@@ -19,9 +22,20 @@
   },
   "homepage": "https://github.com/nix-community/tree-sitter-nix#readme",
   "dependencies": {
-    "nan": "^2.17.0"
+    "node-addon-api": "^7.1.0",
+    "node-gyp-build": "^4.8.0"
   },
-  "devDependencies": {},
+  "peerDependencies": {
+    "tree-sitter": "^0.21.0"
+  },
+  "peerDependenciesMeta": {
+    "tree_sitter": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "prebuildify": "^6.0.0"
+  },
   "tree-sitter": [
     {
       "file-types": [
@@ -36,5 +50,13 @@
       ],
       "scope": "source.nix"
     }
+  ],
+  "files": [
+    "grammar.js",
+    "binding.gyp",
+    "prebuilds/**",
+    "bindings/node/*",
+    "queries/*",
+    "src/**"
   ]
 }
